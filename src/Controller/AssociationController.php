@@ -30,14 +30,24 @@ class AssociationController extends AbstractController
      */
     public function new(Request $request): Response
     {
+
+      if (!$this->getUser()){
+          $this->addFlash("danger","Merci de bien vouloir se connecter");
+          return $this->redirectToRoute('app_login');
+      }
+
         $association = new Association();
         $form = $this->createForm(AssociationType::class, $association);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            $association = $this->setUser($this->getUser());
             $entityManager->persist($association);
             $entityManager->flush();
+
+
+            $this->addFlash("succes","BRAVO");
 
             return $this->redirectToRoute('association_index');
         }

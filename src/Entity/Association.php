@@ -28,6 +28,11 @@ class Association
      */
     private $vehicule;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="associations")
+     */
+    private $user;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -62,5 +67,17 @@ class Association
     public function __toString()
     {
      return $this ->conducteur."".$this->vehicule ;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): self
+    {
+        $this->user = $user;
+
+        return $this;
     }
 }
